@@ -2,12 +2,9 @@ import { object, string, TypeOf } from "zod";
 
 export const loginUserSchema = {
   body: object({
-    username: string({
-      required_error: "Username is required",
-    }),
     email: string({
       required_error: "Email is required",
-    }),
+    }).email("Not a valid email."),
     password: string({
       required_error: "Password is required",
     })
