@@ -1,26 +1,43 @@
+import "dotenv/config";
 import express from "express";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import { connectToDB, disconnectFromDB } from "./utils";
+import { CORS_ORIGIN } from "./constants";
+import helmet from "helmet";
 
 const PORT = process.env.PORT || 4000;
 
 const app = express();
 
-const server = app.listen(PORT, () => {
+// Middlewares
+app.use(cookieParser());
+app.use(express.json());
+app.use(
+  cors({
+    origin: CORS_ORIGIN,
+  })
+);
+app.use(helmet());
+
+const server = app.listen(PORT, async () => {
+  await connectToDB();
   console.log(`Server listening at port ${PORT}!`);
 });
 
 // Signals to listen to in the case we want to kill the server
 const signals = ["SIGTERM", "SIGINT"];
 
-function gracefulShutdown(signal: string) {
+function shutdownServer(signal: string) {
   process.on(signal, async () => {
     server.close();
 
-    // TODO: Disconnect from DB
+    await disconnectFromDB();
 
-    console.log("Shutting down... My work here is done!");
+    console.log(`[${signal}] Shutting down... My work here is done!`);
 
     process.exit(0);
   });
 }
 
-signals.map((signal) => gracefulShutdown(signal));
+signals.map((signal) => shutdownServer(signal));
