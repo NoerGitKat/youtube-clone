@@ -1,8 +1,12 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { RegisterUserBodyType } from "./user.schema";
 import { createUser } from "./user.service";
 
-export async function registerUser(req: Request, res: Response) {
+export async function registerUser(
+  req: Request<{}, {}, RegisterUserBodyType>,
+  res: Response
+) {
   const { username, email, password } = req.body;
 
   try {

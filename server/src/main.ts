@@ -5,6 +5,7 @@ import cors from "cors";
 import { connectToDB, disconnectFromDB } from "./utils";
 import { CORS_ORIGIN } from "./constants";
 import helmet from "helmet";
+import router from "./modules/user/user.route";
 
 const PORT = process.env.PORT || 4000;
 
@@ -19,6 +20,9 @@ app.use(
   })
 );
 app.use(helmet());
+
+// Routes
+app.use("/api/users", router);
 
 const server = app.listen(PORT, async () => {
   await connectToDB();
