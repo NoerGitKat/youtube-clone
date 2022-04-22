@@ -7,6 +7,7 @@ import { CORS_ORIGIN } from "./constants";
 import helmet from "helmet";
 import { default as userRouter } from "./modules/user/user.route";
 import { default as authRouter } from "./modules/auth/auth.route";
+import { default as videosRouter } from "./modules/videos/videos.route";
 import { deserializeUser } from "./middleware";
 
 const PORT = process.env.PORT || 4000;
@@ -27,6 +28,7 @@ app.use(deserializeUser);
 // Routes
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/videos", videosRouter);
 
 const server = app.listen(PORT, async () => {
   await connectToDB();

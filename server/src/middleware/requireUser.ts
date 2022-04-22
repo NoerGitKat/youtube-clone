@@ -10,5 +10,3 @@ function requireUser(req: Request, res: Response, next: NextFunction) {
 }
 
 export default requireUser;
-
-// https://youtu.be/hPck3Q13wdE?t=4217
