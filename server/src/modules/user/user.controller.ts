@@ -25,3 +25,7 @@ export async function registerUser(
 
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
 }
+
+export async function getMe(req: Request, res: Response) {
+  return res.send(res.locals.user);
+}

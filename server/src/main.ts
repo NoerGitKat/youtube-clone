@@ -7,6 +7,7 @@ import { CORS_ORIGIN } from "./constants";
 import helmet from "helmet";
 import { default as userRouter } from "./modules/user/user.route";
 import { default as authRouter } from "./modules/auth/auth.route";
+import { deserializeUser } from "./middleware";
 
 const PORT = process.env.PORT || 4000;
 
@@ -21,6 +22,7 @@ app.use(
   })
 );
 app.use(helmet());
+app.use(deserializeUser);
 
 // Routes
 app.use("/api/users", userRouter);
