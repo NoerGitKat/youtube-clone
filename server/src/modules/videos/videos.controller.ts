@@ -1,10 +1,11 @@
 import busboy from "busboy";
 import fs from "fs";
-import { ErrorRequestHandler, Request, Response } from "express";
+import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { MIME_TYPES } from "../../constants";
 import { getPath } from "../../utils";
-import { createVideo } from "./videos.service";
+import { createVideo, findVideo } from "./videos.service";
+import { updateVideoParamsType, UpdateVideoBodyType } from "./videos.schema";
 
 export async function uploadVideo(req: Request, res: Response) {
   const bb = busboy({ headers: req.headers });
@@ -52,4 +53,29 @@ export async function uploadVideo(req: Request, res: Response) {
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .send(`Could not create video: ${error.message}`);
   }
+}
+
+export async function updateVideo(
+  req: Request<updateVideoParamsType, {}, UpdateVideoBodyType>,
+  res: Response
+) {
+  const { videoId } = req.params;
+  const { title, description, published } = req.body;
+
+  const { _id: userId } = res.locals.user;
+
+  const video = await findVideo(videoId);
+
+  if (!video) return res.status(StatusCodes.NOT_FOUND).send("Video not found.");
+
+  if (String(video.owner) !== String(userId))
+    return res.status(StatusCodes.UNAUTHORIZED).send("Not authorized.");
+
+  video.title = title;
+  video.description = description;
+  video.published = published;
+
+  await video.save();
+
+  return res.status(StatusCodes.OK).send(video);
 }
