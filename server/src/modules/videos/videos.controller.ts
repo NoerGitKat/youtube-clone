@@ -4,7 +4,7 @@ import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 import { MIME_TYPES } from "../../constants";
 import { getPath } from "../../utils";
-import { createVideo, findVideo } from "./videos.service";
+import { createVideo, findVideo, findVideos } from "./videos.service";
 import { updateVideoParamsType, UpdateVideoBodyType } from "./videos.schema";
 
 export async function uploadVideo(req: Request, res: Response) {
@@ -78,4 +78,18 @@ export async function updateVideo(
   await video.save();
 
   return res.status(StatusCodes.OK).send(video);
+}
+
+export async function fetchVideos(_: Request, res: Response) {
+  try {
+    const videos = await findVideos();
+    if (!videos)
+      return res.status(StatusCodes.NOT_FOUND).send("No videos found.");
+
+    return res.status(StatusCodes.OK).send(videos);
+  } catch (error) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .send(`Error fetching videos: ${JSON.stringify(error)}`);
+  }
 }

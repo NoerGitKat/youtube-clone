@@ -7,3 +7,7 @@ export function createVideo(owner: string) {
 export function findVideo(videoId: Video["videoId"]) {
   return VideoModel.findOne({ videoId });
 }
+
+export function findVideos() {
+  return VideoModel.find();
+}
