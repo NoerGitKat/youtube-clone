@@ -4,7 +4,12 @@ import {
   processRequestParams,
 } from "zod-express-middleware";
 import requireUser from "../../middleware/requireUser";
-import { updateVideo, uploadVideo, fetchVideos } from "./videos.controller";
+import {
+  updateVideo,
+  uploadVideo,
+  fetchVideos,
+  streamVideo,
+} from "./videos.controller";
 import { updateVideoSchema } from "./videos.schema";
 
 const router = Router();
@@ -20,5 +25,7 @@ router.patch(
   processRequestParams(updateVideoSchema.params),
   updateVideo
 );
+
+router.get("/:videoId", streamVideo);
 
 export default router;

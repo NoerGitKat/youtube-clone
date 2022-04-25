@@ -2,7 +2,7 @@ import busboy from "busboy";
 import fs from "fs";
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { MIME_TYPES } from "../../constants";
+import { CHUNK_SIZE_IN_BYTES, MIME_TYPES } from "../../constants";
 import { getPath } from "../../utils";
 import { createVideo, findVideo, findVideos } from "./videos.service";
 import { updateVideoParamsType, UpdateVideoBodyType } from "./videos.schema";
@@ -92,4 +92,50 @@ export async function fetchVideos(_: Request, res: Response) {
       .status(StatusCodes.NOT_FOUND)
       .send(`Error fetching videos: ${JSON.stringify(error)}`);
   }
+}
+
+export async function streamVideo(req: Request, res: Response) {
+  const { videoId } = req.params;
+
+  const range = req.headers.range;
+
+  if (!range)
+    return res.status(StatusCodes.BAD_REQUEST).send("Range must be provided");
+
+  try {
+    const video = await findVideo(videoId);
+    if (!video)
+      return res.status(StatusCodes.NOT_FOUND).send("Video not found.");
+
+    const filePath = getPath(videoId, video.extension);
+
+    const fileSizeInBytes = fs.statSync(filePath).size;
+
+    // Stay within file range
+    const chunkStart = Number(range.replace(/\D/g, ""));
+    const chunkEnd = Math.min(
+      chunkStart + CHUNK_SIZE_IN_BYTES,
+      fileSizeInBytes - 1
+    );
+
+    const contentLength = chunkEnd - chunkStart + 1;
+
+    const headers = {
+      "Content-Range": `bytes ${chunkStart}-${chunkEnd}/${fileSizeInBytes}`,
+      "Accept-Ranges": "bytes",
+      "Content-Length": contentLength,
+      "Content-Type": `video/${video.extension}`,
+      // "Cross-Origin_Resource-Policy: "cross-origin"
+    };
+
+    res.writeHead(StatusCodes.PARTIAL_CONTENT, headers);
+
+    // Create read stream
+    const videoStream = fs.createReadStream(filePath, {
+      start: chunkStart,
+      end: chunkEnd,
+    });
+
+    videoStream.pipe(res);
+  } catch (error) {}
 }
