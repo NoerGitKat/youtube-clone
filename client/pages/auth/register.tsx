@@ -17,7 +17,7 @@ import { Check, X } from "tabler-icons-react";
 import { registerUser } from "../../api";
 
 const Register = () => {
-  const { onSubmit, getInputProps, errors } = useForm({
+  const { onSubmit, getInputProps } = useForm({
     initialValues: {
       email: "",
       username: "",
@@ -36,8 +36,6 @@ const Register = () => {
       confirmPassword: "Passwords don't match",
     },
   });
-
-  console.log("errors", errors);
 
   const mutation = useMutation<
     string,

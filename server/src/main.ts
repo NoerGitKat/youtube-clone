@@ -1,16 +1,14 @@
-import "dotenv/config";
-import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { connectToDB, disconnectFromDB } from "./utils";
-import { CORS_ORIGIN } from "./constants";
+import "dotenv/config";
+import express from "express";
 import helmet from "helmet";
-import { default as userRouter } from "./modules/user/user.route";
-import { default as authRouter } from "./modules/auth/auth.route";
-import { default as videosRouter } from "./modules/videos/videos.route";
+import { CORS_ORIGIN, PORT } from "./constants";
 import { deserializeUser } from "./middleware";
-
-const PORT = process.env.PORT || 4000;
+import { default as authRouter } from "./modules/auth/auth.route";
+import { default as userRouter } from "./modules/user/user.route";
+import { default as videosRouter } from "./modules/videos/videos.route";
+import { connectToDB, disconnectFromDB } from "./utils";
 
 const app = express();
 
@@ -20,6 +18,7 @@ app.use(express.json());
 app.use(
   cors({
     origin: CORS_ORIGIN,
+    credentials: true,
   })
 );
 app.use(helmet());
