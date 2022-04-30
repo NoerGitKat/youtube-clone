@@ -15,7 +15,8 @@ export async function login(
   try {
     const user = await findUserByEmail(email);
 
-    if (!user || !user.comparePassword(password))
+    const isMatchedPassword = await user?.comparePassword(password);
+    if (!user || !isMatchedPassword)
       return res
         .status(StatusCodes.UNAUTHORIZED)
         .send("Invalid email or password.");

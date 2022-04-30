@@ -8,7 +8,7 @@ import {
   Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/hooks";
-import { showNotification } from "@mantine/notifications";
+import { cleanNotifications, showNotification } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import Head from "next/head";
 import Router from "next/router";
@@ -40,6 +40,7 @@ const Login = () => {
     Parameters<typeof loginUser>["0"]
   >(loginUser, {
     onSuccess: () => {
+      cleanNotifications();
       showNotification({
         id: "register",
         title: "Success",

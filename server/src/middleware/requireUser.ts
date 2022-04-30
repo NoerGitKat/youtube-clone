@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
 
-function requireUser(req: Request, res: Response, next: NextFunction) {
+function requireUser(_: Request, res: Response, next: NextFunction) {
   const user = res.locals.user;
 
   if (!user) return res.sendStatus(StatusCodes.FORBIDDEN);
