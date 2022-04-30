@@ -2,11 +2,12 @@ import { Anchor, AppShell, Box, Header, Navbar } from "@mantine/core";
 import Image from "next/image";
 import Link from "next/link";
 import React, { ReactNode } from "react";
+import { UploadVideo } from "../components";
 import { useMe } from "../context/me";
 
 const HomePageLayout = ({ children }: { children: ReactNode }) => {
   const { user, refetch } = useMe();
-  console.log("user", user);
+
   return (
     <AppShell
       padding="md"
@@ -41,7 +42,7 @@ const HomePageLayout = ({ children }: { children: ReactNode }) => {
               </>
             )}
 
-            {user && <p>Upload a video!</p>}
+            {user && <UploadVideo />}
           </Box>
         </Header>
       }

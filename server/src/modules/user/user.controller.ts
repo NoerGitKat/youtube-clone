@@ -17,7 +17,7 @@ export async function registerUser(
     });
 
     return res.status(StatusCodes.CREATED).send("Succesfully created user!");
-  } catch (error) {
+  } catch (error: any) {
     if (error.code === 11000) {
       return res.status(StatusCodes.CONFLICT).send("User already exists.");
     }
@@ -26,6 +26,6 @@ export async function registerUser(
   return res.status(StatusCodes.INTERNAL_SERVER_ERROR).send(error.message);
 }
 
-export async function getMe(req: Request, res: Response) {
+export async function getMe(_: Request, res: Response) {
   return res.send(res.locals.user);
 }
