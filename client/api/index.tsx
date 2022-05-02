@@ -39,11 +39,12 @@ export const uploadVideo = async ({
   formData: FormData;
   config: { onUploadProgress: (progressEvent: any) => void };
 }) => {
-  const data = await axios.post(`${BASE_URL}/api/videos`, formData, {
+  const res = await axios.post(`${BASE_URL}/api/videos`, formData, {
     withCredentials: true,
     ...config,
     headers: {
       "Content-Type": "multipart/form-data",
     },
   });
+  return res.data;
 };
