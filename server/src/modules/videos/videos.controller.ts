@@ -1,11 +1,11 @@
 import busboy from "busboy";
-import fs from "fs";
 import { Request, Response } from "express";
+import fs from "fs";
 import { StatusCodes } from "http-status-codes";
 import { CHUNK_SIZE_IN_BYTES, MIME_TYPES } from "../../constants";
 import { getPath } from "../../utils";
+import { UpdateVideoBodyType, updateVideoParamsType } from "./videos.schema";
 import { createVideo, findVideo, findVideos } from "./videos.service";
-import { updateVideoParamsType, UpdateVideoBodyType } from "./videos.schema";
 
 export async function uploadVideo(req: Request, res: Response) {
   const bb = busboy({ headers: req.headers });
@@ -125,7 +125,7 @@ export async function streamVideo(req: Request, res: Response) {
       "Accept-Ranges": "bytes",
       "Content-Length": contentLength,
       "Content-Type": `video/${video.extension}`,
-      // "Cross-Origin_Resource-Policy: "cross-origin"
+      "Cross-Origin-Resource-Policy": "cross-origin",
     };
 
     res.writeHead(StatusCodes.PARTIAL_CONTENT, headers);

@@ -7,9 +7,8 @@ import { useMe } from "../context/me";
 import { useVideos } from "../context/video";
 
 const HomePageLayout = ({ children }: { children: ReactNode }) => {
-  const { user, refetch } = useMe();
+  const { user } = useMe();
   const { videos } = useVideos();
-  console.log("videos are", videos);
 
   return (
     <AppShell
