@@ -4,6 +4,7 @@ import { AxiosError, AxiosResponse } from "axios";
 import { Dispatch } from "react";
 import { useMutation } from "react-query";
 import { editVideo } from "../../api";
+import { useVideos } from "../../context/video";
 import { IVideo } from "../../types";
 
 const EditVideoForm = ({
@@ -13,6 +14,7 @@ const EditVideoForm = ({
   videoId: string;
   setIsOpened: Dispatch<React.SetStateAction<boolean>>;
 }) => {
+  const { refetch } = useVideos();
   const { onSubmit, getInputProps } = useForm({
     initialValues: {
       title: "",
@@ -27,6 +29,7 @@ const EditVideoForm = ({
     Parameters<typeof editVideo>["0"]
   >(editVideo, {
     onSuccess: () => {
+      refetch();
       setIsOpened(false);
     },
   });

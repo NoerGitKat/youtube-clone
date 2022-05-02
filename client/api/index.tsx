@@ -63,3 +63,8 @@ export const editVideo = async ({
   });
   return res.data;
 };
+
+export const getVideos = async () => {
+  const res = await axios.get(`${BASE_URL}/api/videos`);
+  return res.data;
+};

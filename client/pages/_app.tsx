@@ -4,6 +4,7 @@ import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { MeContextProvider } from "../context/me";
+import { VideoContextProvider } from "../context/video";
 import "../styles/globals.css";
 import { AppPropsWithLayout } from "../types";
 
@@ -30,13 +31,15 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       >
         <NotificationsProvider>
           <QueryClientProvider client={queryClient}>
-            <MeContextProvider>
-              {getLayout(
-                <main>
-                  <Component {...pageProps} />
-                </main>
-              )}
-            </MeContextProvider>
+            <VideoContextProvider>
+              <MeContextProvider>
+                {getLayout(
+                  <main>
+                    <Component {...pageProps} />
+                  </main>
+                )}
+              </MeContextProvider>
+            </VideoContextProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </NotificationsProvider>
