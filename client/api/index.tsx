@@ -39,12 +39,27 @@ export const uploadVideo = async ({
   formData: FormData;
   config: { onUploadProgress: (progressEvent: any) => void };
 }) => {
-  const res = await axios.post(`${BASE_URL}/api/videos`, formData, {
+  const res = await axios.post(`${BASE_URL}/api/videos/upload`, formData, {
     withCredentials: true,
     ...config,
     headers: {
       "Content-Type": "multipart/form-data",
     },
+  });
+  return res.data;
+};
+
+export const editVideo = async ({
+  videoId,
+  ...payload
+}: {
+  videoId: string;
+  title: string;
+  description: string;
+  published: boolean;
+}) => {
+  const res = await axios.patch(`${BASE_URL}/api/videos/${videoId}`, payload, {
+    withCredentials: true,
   });
   return res.data;
 };

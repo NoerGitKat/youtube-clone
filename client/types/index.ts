@@ -7,6 +7,18 @@ export enum QueryKeys {
   videos = "videos",
 }
 
+export interface IVideo {
+  _id: string;
+  owner: string;
+  published: boolean;
+  videoId: string;
+  createdAt: Date;
+  updatedAt: Date;
+  __v: number;
+  extension: string;
+  description: string;
+  title: string;
+}
 export interface IMe {
   _id: string;
   email: string;

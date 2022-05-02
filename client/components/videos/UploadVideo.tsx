@@ -5,6 +5,7 @@ import { useMutation } from "react-query";
 import { ArrowBigUpLine } from "tabler-icons-react";
 import { uploadVideo } from "../../api";
 import { upload } from "../../utils";
+import EditVideoForm from "./EditVideoForm";
 
 const UploadVideo = () => {
   const [isOpened, setIsOpened] = useState(false);
@@ -20,6 +21,8 @@ const UploadVideo = () => {
       setProgress(percent);
     },
   };
+
+  console.log("mutation data", mutation);
 
   return (
     <>
@@ -53,6 +56,12 @@ const UploadVideo = () => {
               );
             }}
           </Dropzone>
+        )}
+        {mutation.data && (
+          <EditVideoForm
+            videoId={mutation.data.videoId}
+            setIsOpened={setIsOpened}
+          />
         )}
       </Modal>
       <Button onClick={() => setIsOpened(true)}>Upload Video</Button>
