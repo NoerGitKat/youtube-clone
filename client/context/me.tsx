@@ -2,7 +2,7 @@ import { Loader } from "@mantine/core";
 import { createContext, ReactNode, useContext } from "react";
 import { RefetchOptions, RefetchQueryFilters, useQuery } from "react-query";
 import { getMe } from "../api";
-import { IMe, QueryKeys } from "../types";
+import { QueryKeys } from "../types";
 
 const MeContext = createContext<{
   user: IMe | null | undefined;

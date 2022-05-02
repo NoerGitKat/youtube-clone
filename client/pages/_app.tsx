@@ -2,6 +2,7 @@ import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
 import Head from "next/head";
 import { QueryClient, QueryClientProvider } from "react-query";
+import { ReactQueryDevtools } from "react-query/devtools";
 import { MeContextProvider } from "../context/me";
 import "../styles/globals.css";
 import { AppPropsWithLayout } from "../types";
@@ -36,6 +37,7 @@ function MyApp({ Component, pageProps }: AppPropsWithLayout) {
                 </main>
               )}
             </MeContextProvider>
+            <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
         </NotificationsProvider>
       </MantineProvider>

@@ -11,13 +11,16 @@ import { useForm } from "@mantine/hooks";
 import { cleanNotifications, showNotification } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import Head from "next/head";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import React from "react";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Check, X } from "tabler-icons-react";
 import { loginUser } from "../../api";
+import { QueryKeys } from "../../types";
 
 const Login = () => {
+  const queryClient = useQueryClient();
+  const { push } = useRouter();
   const { onSubmit, getInputProps } = useForm({
     initialValues: {
       email: "",
@@ -48,7 +51,8 @@ const Login = () => {
         color: "green",
         icon: <Check size={18} />,
       });
-      Router.push("/");
+      queryClient.prefetchQuery(QueryKeys.me);
+      push("/");
     },
     onError: (error) => {
       console.log(`%cError: ${error.response?.data}`, "color:blue");
